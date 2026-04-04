@@ -4,6 +4,7 @@ import { ProductDiscovery } from "@/components/product-discovery"
 import { ProductStory } from "@/components/product-story"
 import { ShopTheLook } from "@/components/shop-the-look"
 import { FindYourPerfectPiece } from "@/components/find-your-perfect-piece"
+import { Events } from "@/components/events"
 
 export default function Home() {
   return (
@@ -14,6 +15,7 @@ export default function Home() {
       <ProductStory />
       <ShopTheLook />
       <FindYourPerfectPiece />
+      <Events />
     </main>
   )
 }
