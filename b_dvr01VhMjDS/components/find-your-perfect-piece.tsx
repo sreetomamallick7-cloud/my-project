@@ -59,18 +59,11 @@ const quizQuestions = [
   },
 ]
 
-const previewChips = {
-  occasion: ["A Proposal", "Our Anniversary", "A Self-Gift"],
-  stone: ["Flawless White", "Rare Coloured", "Vintage Cut"],
-  feeling: ["Understated", "Statement", "Heirloom"],
-}
-
 export function FindYourPerfectPiece() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [currentStep, setCurrentStep] = useState(0)
   const [answers, setAnswers] = useState<(string | null)[]>(Array(4).fill(null))
   const [showResult, setShowResult] = useState(false)
-  const [expandedTab, setExpandedTab] = useState<string | null>(null)
 
   const handleOpenModal = () => {
     setIsModalOpen(true)
@@ -100,10 +93,6 @@ export function FindYourPerfectPiece() {
     setCurrentStep(0)
     setAnswers(Array(4).fill(null))
     setShowResult(false)
-  }
-
-  const handleTabClick = (tab: string) => {
-    setExpandedTab(expandedTab === tab ? null : tab)
   }
 
   const progressPercentage = showResult ? 100 : ((currentStep + 1) / 4) * 100
@@ -172,7 +161,7 @@ export function FindYourPerfectPiece() {
 
             {/* Supporting Copy */}
             <p
-              className="mx-auto mb-12 max-w-[44ch] font-sans font-light"
+              className="mx-auto mb-10 max-w-[44ch] font-sans font-light"
               style={{
                 fontSize: "16px",
                 lineHeight: "2.0",
@@ -181,89 +170,6 @@ export function FindYourPerfectPiece() {
             >
               Answer four questions about the moment, the feeling, and the stone — and we will show you the pieces from our collection that were made for exactly this.
             </p>
-
-            {/* Quiz Preview Tabs */}
-            <div className="mb-12 space-y-4">
-              {/* Tab Buttons */}
-              <div className="flex justify-center gap-3">
-                {[
-                  { id: "occasion", label: "Occasion" },
-                  { id: "stone", label: "Stone" },
-                  { id: "feeling", label: "Feeling" },
-                ].map((tab) => (
-                  <button
-                    key={tab.id}
-                    onClick={() => handleTabClick(tab.id)}
-                    className="font-sans font-light uppercase transition-all duration-300"
-                    style={{
-                      height: "40px",
-                      padding: "0 28px",
-                      backgroundColor: expandedTab === tab.id ? "rgba(27,58,140,0.3)" : "rgba(255,255,255,0.04)",
-                      border: expandedTab === tab.id ? "1px solid rgba(27,58,140,0.6)" : "1px solid rgba(255,255,255,0.15)",
-                      fontSize: "10px",
-                      letterSpacing: "0.15em",
-                      color: expandedTab === tab.id ? "#FFFFFF" : "rgba(255,255,255,0.5)",
-                    }}
-                    onMouseEnter={(e) => {
-                      if (expandedTab !== tab.id) {
-                        e.currentTarget.style.borderColor = "rgba(255,255,255,0.35)"
-                        e.currentTarget.style.color = "rgba(255,255,255,0.8)"
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (expandedTab !== tab.id) {
-                        e.currentTarget.style.borderColor = "rgba(255,255,255,0.15)"
-                        e.currentTarget.style.color = "rgba(255,255,255,0.5)"
-                      }
-                    }}
-                  >
-                    {tab.label}
-                  </button>
-                ))}
-              </div>
-
-              {/* Expanded Options */}
-              <div
-                className="overflow-hidden transition-all duration-400"
-                style={{
-                  maxHeight: expandedTab ? "120px" : "0",
-                  opacity: expandedTab ? 1 : 0,
-                }}
-              >
-                <div className="flex flex-wrap justify-center gap-2.5 pt-2">
-                  {expandedTab &&
-                    previewChips[expandedTab as keyof typeof previewChips].map((chip) => (
-                      <div
-                        key={chip}
-                        className="font-sans font-light"
-                        style={{
-                          height: "36px",
-                          padding: "0 20px",
-                          display: "flex",
-                          alignItems: "center",
-                          backgroundColor: "rgba(255,255,255,0.06)",
-                          border: "1px solid rgba(255,255,255,0.15)",
-                          fontSize: "11px",
-                          letterSpacing: "0.08em",
-                          color: "rgba(255,255,255,0.55)",
-                        }}
-                      >
-                        {chip}
-                      </div>
-                    ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Ornamental Line */}
-            <div
-              className="mx-auto mb-12"
-              style={{
-                width: "48px",
-                height: "1px",
-                backgroundColor: "rgba(255,255,255,0.2)",
-              }}
-            />
 
             {/* Primary CTA Button */}
             <button
