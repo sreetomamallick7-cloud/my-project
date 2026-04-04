@@ -2,78 +2,69 @@
 
 import { useState } from "react"
 
-// SVG Icons - stroke only, 40x40, royal blue
-const BookIcon = () => (
+// SVG Icons - premium stroke style, 48x48
+const BookIcon = ({ isHovered }: { isHovered: boolean }) => (
   <svg
-    width="40"
-    height="40"
-    viewBox="0 0 40 40"
+    width="48"
+    height="48"
+    viewBox="0 0 48 48"
     fill="none"
-    stroke="#1B3A8C"
-    strokeWidth="1.5"
+    className="transition-all duration-300"
+    style={{
+      stroke: isHovered ? "#FFFFFF" : "#1B3A8C",
+    }}
+    strokeWidth="1.2"
     strokeLinecap="round"
     strokeLinejoin="round"
   >
-    <path d="M4 6h10c2.2 0 4 1.8 4 4v22c0-1.7-1.3-3-3-3H4V6z" />
-    <path d="M36 6H26c-2.2 0-4 1.8-4 4v22c0-1.7 1.3-3 3-3h11V6z" />
-    <path d="M12 12h-4" />
-    <path d="M12 17h-4" />
-    <path d="M28 12h4" />
-    <path d="M28 17h4" />
+    <path d="M8 10h12c2.2 0 4 1.8 4 4v24c0-2.2-1.8-4-4-4H8V10z" />
+    <path d="M40 10H28c-2.2 0-4 1.8-4 4v24c0-2.2 1.8-4 4-4h12V10z" />
+    <path d="M14 18h-2" />
+    <path d="M14 24h-2" />
+    <path d="M34 18h2" />
+    <path d="M34 24h2" />
   </svg>
 )
 
-const DiamondChatIcon = () => (
+const DiamondChatIcon = ({ isHovered }: { isHovered: boolean }) => (
   <svg
-    width="40"
-    height="40"
-    viewBox="0 0 40 40"
+    width="48"
+    height="48"
+    viewBox="0 0 48 48"
     fill="none"
-    stroke="#1B3A8C"
-    strokeWidth="1.5"
+    className="transition-all duration-300"
+    style={{
+      stroke: isHovered ? "#FFFFFF" : "#1B3A8C",
+    }}
+    strokeWidth="1.2"
     strokeLinecap="round"
     strokeLinejoin="round"
   >
-    <path d="M6 8h28v20c0 1.1-.9 2-2 2H14l-6 6v-6H8c-1.1 0-2-.9-2-2V8z" />
-    <path d="M20 14l3 4-3 4-3-4 3-4z" />
+    <path d="M8 10h32v24H16l-8 8v-8H8V10z" />
+    <path d="M24 18l4 5-4 5-4-5 4-5z" />
   </svg>
 )
 
-const CalendarIcon = () => (
+const CoBrowseIcon = ({ isHovered }: { isHovered: boolean }) => (
   <svg
-    width="40"
-    height="40"
-    viewBox="0 0 40 40"
+    width="48"
+    height="48"
+    viewBox="0 0 48 48"
     fill="none"
-    stroke="#1B3A8C"
-    strokeWidth="1.5"
+    className="transition-all duration-300"
+    style={{
+      stroke: isHovered ? "#FFFFFF" : "#1B3A8C",
+    }}
+    strokeWidth="1.2"
     strokeLinecap="round"
     strokeLinejoin="round"
   >
-    <rect x="6" y="8" width="28" height="26" rx="0" />
-    <path d="M6 16h28" />
-    <path d="M14 4v6" />
-    <path d="M26 4v6" />
-    <circle cx="20" cy="24" r="2" fill="#1B3A8C" stroke="none" />
-  </svg>
-)
-
-const CoBrowseIcon = () => (
-  <svg
-    width="40"
-    height="40"
-    viewBox="0 0 40 40"
-    fill="none"
-    stroke="#1B3A8C"
-    strokeWidth="1.5"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <rect x="4" y="6" width="32" height="24" rx="0" />
-    <path d="M4 30h32" />
-    <path d="M16 34h8" />
-    <path d="M14 16l4 5-2 1 4 4" />
-    <path d="M26 14l-4 5 2 1-4 4" />
+    <rect x="6" y="8" width="36" height="26" />
+    <path d="M18 38h12" />
+    <path d="M24 34v4" />
+    <circle cx="18" cy="21" r="3" />
+    <circle cx="30" cy="21" r="3" />
+    <path d="M21 21h6" />
   </svg>
 )
 
@@ -108,13 +99,6 @@ const intentCards = [
     cta: "Speak to an Expert",
   },
   {
-    icon: CalendarIcon,
-    heading: "Book a Private Appointment",
-    description:
-      "Schedule a one-hour private consultation — in-person at our atelier or via a personal video call.",
-    cta: "Book Appointment",
-  },
-  {
     icon: CoBrowseIcon,
     heading: "Browse Together, Live",
     description:
@@ -145,225 +129,231 @@ export function IntentCapture() {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null)
 
   return (
-    <section
-      className="relative w-full"
-      style={{
-        minHeight: "100vh",
-        backgroundColor: "#0A1628",
-      }}
-    >
-      {/* Background Image Layer */}
+    <section className="w-full">
+      {/* How Would You Like to Begin - Clean White Background */}
       <div
-        className="absolute inset-0"
         style={{
-          backgroundImage: "url('/images/intent-consultation.jpg')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundAttachment: "fixed",
-          filter: "saturate(0.85)",
-        }}
-      />
-
-      {/* Dark Overlay */}
-      <div
-        className="absolute inset-0"
-        style={{
-          backgroundColor: "rgba(10,22,40,0.86)",
-        }}
-      />
-
-      {/* Content Layer */}
-      <div
-        className="relative mx-auto"
-        style={{
-          maxWidth: "1080px",
+          backgroundColor: "#FFFFFF",
           padding: "96px 24px",
         }}
       >
-        {/* Section Header */}
-        <div className="text-center">
-          {/* Eyebrow */}
-          <p
-            className="font-sans uppercase"
-            style={{
-              fontSize: "10px",
-              letterSpacing: "0.26em",
-              color: "#1B3A8C",
-              marginBottom: "16px",
-            }}
-          >
-            The Next Step
-          </p>
-
-          {/* Ornamental Line */}
-          <div
-            className="mx-auto"
-            style={{
-              width: "48px",
-              height: "1px",
-              backgroundColor: "rgba(255,255,255,0.2)",
-              marginBottom: "16px",
-            }}
-          />
-
-          {/* Heading */}
-          <h2
-            className="font-serif"
-            style={{
-              fontSize: "56px",
-              fontWeight: 300,
-              color: "#FFFFFF",
-              lineHeight: 1.05,
-              letterSpacing: "0.02em",
-              marginBottom: "16px",
-            }}
-          >
-            How would you like to{" "}
-            <span className="italic">begin?</span>
-          </h2>
-
-          {/* Subheading */}
-          <p
-            className="mx-auto font-sans font-light"
-            style={{
-              fontSize: "15px",
-              color: "rgba(255,255,255,0.45)",
-              lineHeight: 1.9,
-              marginBottom: "72px",
-            }}
-          >
-            Every LUMIÈRE journey starts with a conversation.
-            <br />
-            Choose what feels right.
-          </p>
-        </div>
-
-        {/* Four Intent Cards */}
         <div
-          className="grid grid-cols-4"
+          className="mx-auto"
           style={{
-            gap: "1px",
-            backgroundColor: "rgba(255,255,255,0.08)",
+            maxWidth: "1080px",
           }}
         >
-          {intentCards.map((card, index) => {
-            const Icon = card.icon
-            const isHovered = hoveredCard === index
+          {/* Section Header */}
+          <div className="text-center">
+            {/* Eyebrow */}
+            <p
+              className="font-sans uppercase"
+              style={{
+                fontSize: "10px",
+                letterSpacing: "0.26em",
+                color: "#1B3A8C",
+                marginBottom: "16px",
+              }}
+            >
+              The Next Step
+            </p>
 
-            return (
-              <div
-                key={index}
-                className="flex flex-col transition-all duration-300 cursor-pointer"
-                style={{
-                  backgroundColor: isHovered
-                    ? "rgba(27,58,140,0.15)"
-                    : "rgba(255,255,255,0.04)",
-                  border: isHovered
-                    ? "1px solid rgba(27,58,140,0.4)"
-                    : "1px solid rgba(255,255,255,0.1)",
-                  padding: "48px 36px",
-                }}
-                onMouseEnter={() => setHoveredCard(index)}
-                onMouseLeave={() => setHoveredCard(null)}
-              >
-                {/* Icon */}
-                <div style={{ marginBottom: "28px" }}>
-                  <Icon />
-                </div>
+            {/* Ornamental Line */}
+            <div
+              className="mx-auto"
+              style={{
+                width: "48px",
+                height: "1px",
+                backgroundColor: "rgba(10,22,40,0.12)",
+                marginBottom: "16px",
+              }}
+            />
 
-                {/* Heading */}
-                <h3
-                  className="font-serif italic"
-                  style={{
-                    fontSize: "26px",
-                    fontWeight: 300,
-                    color: "#FFFFFF",
-                    lineHeight: 1.15,
-                    marginBottom: "16px",
-                  }}
-                >
-                  {card.heading}
-                </h3>
+            {/* Heading */}
+            <h2
+              className="font-serif"
+              style={{
+                fontSize: "56px",
+                fontWeight: 300,
+                color: "#0A1628",
+                lineHeight: 1.05,
+                letterSpacing: "0.02em",
+                marginBottom: "16px",
+              }}
+            >
+              How would you like to{" "}
+              <span className="italic">begin?</span>
+            </h2>
 
-                {/* Description */}
-                <p
-                  className="font-sans font-light"
-                  style={{
-                    fontSize: "13px",
-                    color: "rgba(255,255,255,0.5)",
-                    lineHeight: 1.9,
-                    maxWidth: "28ch",
-                  }}
-                >
-                  {card.description}
-                </p>
+            {/* Subheading */}
+            <p
+              className="mx-auto font-sans font-light"
+              style={{
+                fontSize: "15px",
+                color: "#5A6478",
+                lineHeight: 1.9,
+                marginBottom: "72px",
+              }}
+            >
+              Every LUMIÈRE journey starts with a conversation.
+              <br />
+              Choose what feels right.
+            </p>
+          </div>
 
-                {/* Divider */}
+          {/* Three Intent Cards */}
+          <div
+            className="grid grid-cols-3"
+            style={{
+              gap: "24px",
+            }}
+          >
+            {intentCards.map((card, index) => {
+              const Icon = card.icon
+              const isHovered = hoveredCard === index
+
+              return (
                 <div
+                  key={index}
+                  className="group flex flex-col cursor-pointer"
                   style={{
-                    height: "1px",
-                    backgroundColor: "rgba(255,255,255,0.08)",
-                    marginTop: "28px",
-                    marginBottom: "28px",
+                    backgroundColor: isHovered ? "#0A1628" : "#FAFAFA",
+                    border: "1px solid",
+                    borderColor: isHovered ? "#0A1628" : "rgba(10,22,40,0.08)",
+                    padding: "48px 40px",
+                    transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                    transform: isHovered ? "translateY(-8px)" : "translateY(0)",
+                    boxShadow: isHovered 
+                      ? "0 20px 40px rgba(10,22,40,0.15)" 
+                      : "0 2px 8px rgba(10,22,40,0.04)",
                   }}
-                />
-
-                {/* CTA */}
-                <div
-                  className="mt-auto flex items-center font-sans uppercase transition-all duration-300"
-                  style={{
-                    fontSize: "11px",
-                    letterSpacing: "0.14em",
-                    color: isHovered ? "#FFFFFF" : "rgba(255,255,255,0.45)",
-                    minHeight: "44px",
-                  }}
+                  onMouseEnter={() => setHoveredCard(index)}
+                  onMouseLeave={() => setHoveredCard(null)}
                 >
-                  {card.cta}
-                  <span
-                    className="ml-2 transition-transform duration-300"
-                    style={{
-                      transform: isHovered ? "translateX(4px)" : "translateX(0)",
+                  {/* Icon Container */}
+                  <div 
+                    className="flex items-center justify-center transition-all duration-400"
+                    style={{ 
+                      marginBottom: "32px",
+                      width: "80px",
+                      height: "80px",
+                      backgroundColor: isHovered ? "rgba(27,58,140,0.2)" : "rgba(27,58,140,0.06)",
+                      border: "1px solid",
+                      borderColor: isHovered ? "rgba(27,58,140,0.4)" : "rgba(27,58,140,0.12)",
                     }}
                   >
-                    →
-                  </span>
+                    <Icon isHovered={isHovered} />
+                  </div>
+
+                  {/* Heading */}
+                  <h3
+                    className="font-serif italic transition-colors duration-300"
+                    style={{
+                      fontSize: "28px",
+                      fontWeight: 300,
+                      color: isHovered ? "#FFFFFF" : "#0A1628",
+                      lineHeight: 1.15,
+                      marginBottom: "16px",
+                    }}
+                  >
+                    {card.heading}
+                  </h3>
+
+                  {/* Description */}
+                  <p
+                    className="font-sans font-light transition-colors duration-300"
+                    style={{
+                      fontSize: "14px",
+                      color: isHovered ? "rgba(255,255,255,0.6)" : "#5A6478",
+                      lineHeight: 1.9,
+                    }}
+                  >
+                    {card.description}
+                  </p>
+
+                  {/* Spacer */}
+                  <div className="flex-1" style={{ minHeight: "32px" }} />
+
+                  {/* CTA Button */}
+                  <button
+                    className="font-sans uppercase transition-all duration-300"
+                    style={{
+                      fontSize: "11px",
+                      letterSpacing: "0.14em",
+                      height: "48px",
+                      padding: "0 28px",
+                      backgroundColor: isHovered ? "#1B3A8C" : "transparent",
+                      border: "1px solid",
+                      borderColor: isHovered ? "#1B3A8C" : "rgba(27,58,140,0.3)",
+                      color: isHovered ? "#FFFFFF" : "#1B3A8C",
+                      transform: isHovered ? "scale(1.02)" : "scale(1)",
+                    }}
+                  >
+                    {card.cta}
+                    <span className="ml-2">→</span>
+                  </button>
                 </div>
-              </div>
-            )
-          })}
+              )
+            })}
+          </div>
         </div>
 
-        {/* Divider between cards and Inner Circle */}
+      {/* Inner Circle Section - With Background Image */}
+      <div
+        className="relative"
+        style={{
+          backgroundColor: "#0A1628",
+        }}
+      >
+        {/* Background Image Layer */}
         <div
+          className="absolute inset-0"
           style={{
-            height: "1px",
-            backgroundColor: "rgba(255,255,255,0.08)",
-            marginTop: "64px",
+            backgroundImage: "url('/images/intent-consultation.jpg')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundAttachment: "fixed",
+            filter: "saturate(0.85)",
           }}
         />
 
-        {/* Transitional Text */}
-        <p
-          className="text-center font-serif italic"
-          style={{
-            fontSize: "22px",
-            fontWeight: 300,
-            color: "rgba(255,255,255,0.35)",
-            marginTop: "48px",
-            marginBottom: "48px",
-          }}
-        >
-          Or, stay connected for life.
-        </p>
-
-        {/* Inner Circle Card */}
+        {/* Dark Overlay */}
         <div
+          className="absolute inset-0"
           style={{
-            backgroundColor: "rgba(27,58,140,0.12)",
-            border: "1px solid rgba(27,58,140,0.3)",
-            padding: "48px 56px",
+            backgroundColor: "rgba(10,22,40,0.88)",
+          }}
+        />
+
+        {/* Content */}
+        <div
+          className="relative mx-auto"
+          style={{
+            maxWidth: "1080px",
+            padding: "96px 24px",
           }}
         >
+          {/* Transitional Text */}
+          <p
+            className="text-center font-serif italic"
+            style={{
+              fontSize: "22px",
+              fontWeight: 300,
+              color: "rgba(255,255,255,0.35)",
+              marginBottom: "48px",
+            }}
+          >
+            Or, stay connected for life.
+          </p>
+
+          {/* Inner Circle Card */}
+          <div
+            style={{
+              backgroundColor: "rgba(27,58,140,0.12)",
+              border: "1px solid rgba(27,58,140,0.3)",
+              padding: "48px 56px",
+            }}
+          >
           <div className="grid grid-cols-12 gap-16">
             {/* Left Column - 7/12 */}
             <div className="col-span-7">
