@@ -70,7 +70,7 @@ export function FindYourPerfectPiece() {
   const [currentStep, setCurrentStep] = useState(0)
   const [answers, setAnswers] = useState<(string | null)[]>(Array(4).fill(null))
   const [showResult, setShowResult] = useState(false)
-  const [revealedRows, setRevealedRows] = useState(0)
+  const [expandedTab, setExpandedTab] = useState<string | null>(null)
 
   const handleOpenModal = () => {
     setIsModalOpen(true)
@@ -102,10 +102,8 @@ export function FindYourPerfectPiece() {
     setShowResult(false)
   }
 
-  const handleRevealNext = () => {
-    if (revealedRows < 3) {
-      setRevealedRows(revealedRows + 1)
-    }
+  const handleTabClick = (tab: string) => {
+    setExpandedTab(expandedTab === tab ? null : tab)
   }
 
   const progressPercentage = showResult ? 100 : ((currentStep + 1) / 4) * 100
@@ -184,96 +182,60 @@ export function FindYourPerfectPiece() {
               Answer four questions about the moment, the feeling, and the stone — and we will show you the pieces from our collection that were made for exactly this.
             </p>
 
-            {/* Quiz Preview Chips - Step by Step Reveal */}
-            <div className="mb-12 space-y-3">
-              {/* Row A - The Occasion */}
-              <div
-                className="cursor-pointer transition-all duration-500"
-                onClick={handleRevealNext}
-                style={{
-                  opacity: revealedRows >= 1 ? 1 : 0.5,
-                  transform: revealedRows >= 1 ? "translateY(0)" : "translateY(4px)",
-                }}
-              >
-                <p
-                  className="mb-3 font-sans uppercase"
-                  style={{
-                    fontSize: "9px",
-                    letterSpacing: "0.18em",
-                    color: "rgba(255,255,255,0.3)",
-                  }}
-                >
-                  The Occasion
-                </p>
-                {revealedRows >= 1 ? (
-                  <div className="flex flex-wrap justify-center gap-2.5">
-                    {previewChips.occasion.map((chip, index) => (
-                      <div
-                        key={chip}
-                        className="font-sans font-light transition-all duration-300"
-                        style={{
-                          height: "36px",
-                          padding: "0 20px",
-                          display: "flex",
-                          alignItems: "center",
-                          backgroundColor: "rgba(255,255,255,0.06)",
-                          border: "1px solid rgba(255,255,255,0.15)",
-                          fontSize: "11px",
-                          letterSpacing: "0.08em",
-                          color: "rgba(255,255,255,0.55)",
-                          animationDelay: `${index * 100}ms`,
-                        }}
-                      >
-                        {chip}
-                      </div>
-                    ))}
-                  </div>
-                ) : (
+            {/* Quiz Preview Tabs */}
+            <div className="mb-12 space-y-4">
+              {/* Tab Buttons */}
+              <div className="flex justify-center gap-3">
+                {[
+                  { id: "occasion", label: "Occasion" },
+                  { id: "stone", label: "Stone" },
+                  { id: "feeling", label: "Feeling" },
+                ].map((tab) => (
                   <button
-                    className="font-sans font-light transition-all duration-200 hover:border-white/40 hover:text-white"
+                    key={tab.id}
+                    onClick={() => handleTabClick(tab.id)}
+                    className="font-sans font-light uppercase transition-all duration-300"
                     style={{
-                      height: "36px",
-                      padding: "0 24px",
-                      display: "inline-flex",
-                      alignItems: "center",
-                      backgroundColor: "transparent",
-                      border: "1px dashed rgba(255,255,255,0.25)",
-                      fontSize: "11px",
-                      letterSpacing: "0.08em",
-                      color: "rgba(255,255,255,0.4)",
+                      height: "40px",
+                      padding: "0 28px",
+                      backgroundColor: expandedTab === tab.id ? "rgba(27,58,140,0.3)" : "rgba(255,255,255,0.04)",
+                      border: expandedTab === tab.id ? "1px solid rgba(27,58,140,0.6)" : "1px solid rgba(255,255,255,0.15)",
+                      fontSize: "10px",
+                      letterSpacing: "0.15em",
+                      color: expandedTab === tab.id ? "#FFFFFF" : "rgba(255,255,255,0.5)",
+                    }}
+                    onMouseEnter={(e) => {
+                      if (expandedTab !== tab.id) {
+                        e.currentTarget.style.borderColor = "rgba(255,255,255,0.35)"
+                        e.currentTarget.style.color = "rgba(255,255,255,0.8)"
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (expandedTab !== tab.id) {
+                        e.currentTarget.style.borderColor = "rgba(255,255,255,0.15)"
+                        e.currentTarget.style.color = "rgba(255,255,255,0.5)"
+                      }
                     }}
                   >
-                    Click to reveal
+                    {tab.label}
                   </button>
-                )}
+                ))}
               </div>
 
-              {/* Row B - The Stone */}
+              {/* Expanded Options */}
               <div
-                className="cursor-pointer transition-all duration-500"
-                onClick={revealedRows >= 1 ? handleRevealNext : undefined}
+                className="overflow-hidden transition-all duration-400"
                 style={{
-                  opacity: revealedRows >= 2 ? 1 : revealedRows >= 1 ? 0.5 : 0.3,
-                  transform: revealedRows >= 2 ? "translateY(0)" : "translateY(4px)",
-                  pointerEvents: revealedRows >= 1 ? "auto" : "none",
+                  maxHeight: expandedTab ? "120px" : "0",
+                  opacity: expandedTab ? 1 : 0,
                 }}
               >
-                <p
-                  className="mb-3 font-sans uppercase"
-                  style={{
-                    fontSize: "9px",
-                    letterSpacing: "0.18em",
-                    color: "rgba(255,255,255,0.3)",
-                  }}
-                >
-                  The Stone
-                </p>
-                {revealedRows >= 2 ? (
-                  <div className="flex flex-wrap justify-center gap-2.5">
-                    {previewChips.stone.map((chip, index) => (
+                <div className="flex flex-wrap justify-center gap-2.5 pt-2">
+                  {expandedTab &&
+                    previewChips[expandedTab as keyof typeof previewChips].map((chip) => (
                       <div
                         key={chip}
-                        className="font-sans font-light transition-all duration-300"
+                        className="font-sans font-light"
                         style={{
                           height: "36px",
                           padding: "0 20px",
@@ -284,94 +246,12 @@ export function FindYourPerfectPiece() {
                           fontSize: "11px",
                           letterSpacing: "0.08em",
                           color: "rgba(255,255,255,0.55)",
-                          animationDelay: `${index * 100}ms`,
                         }}
                       >
                         {chip}
                       </div>
                     ))}
-                  </div>
-                ) : (
-                  <button
-                    className="font-sans font-light transition-all duration-200 hover:border-white/40 hover:text-white"
-                    style={{
-                      height: "36px",
-                      padding: "0 24px",
-                      display: "inline-flex",
-                      alignItems: "center",
-                      backgroundColor: "transparent",
-                      border: "1px dashed rgba(255,255,255,0.25)",
-                      fontSize: "11px",
-                      letterSpacing: "0.08em",
-                      color: "rgba(255,255,255,0.4)",
-                    }}
-                  >
-                    Click to reveal
-                  </button>
-                )}
-              </div>
-
-              {/* Row C - The Feeling */}
-              <div
-                className="cursor-pointer transition-all duration-500"
-                onClick={revealedRows >= 2 ? handleRevealNext : undefined}
-                style={{
-                  opacity: revealedRows >= 3 ? 1 : revealedRows >= 2 ? 0.5 : 0.3,
-                  transform: revealedRows >= 3 ? "translateY(0)" : "translateY(4px)",
-                  pointerEvents: revealedRows >= 2 ? "auto" : "none",
-                }}
-              >
-                <p
-                  className="mb-3 font-sans uppercase"
-                  style={{
-                    fontSize: "9px",
-                    letterSpacing: "0.18em",
-                    color: "rgba(255,255,255,0.3)",
-                  }}
-                >
-                  The Feeling
-                </p>
-                {revealedRows >= 3 ? (
-                  <div className="flex flex-wrap justify-center gap-2.5">
-                    {previewChips.feeling.map((chip, index) => (
-                      <div
-                        key={chip}
-                        className="font-sans font-light transition-all duration-300"
-                        style={{
-                          height: "36px",
-                          padding: "0 20px",
-                          display: "flex",
-                          alignItems: "center",
-                          backgroundColor: "rgba(255,255,255,0.06)",
-                          border: "1px solid rgba(255,255,255,0.15)",
-                          fontSize: "11px",
-                          letterSpacing: "0.08em",
-                          color: "rgba(255,255,255,0.55)",
-                          animationDelay: `${index * 100}ms`,
-                        }}
-                      >
-                        {chip}
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <button
-                    className="font-sans font-light transition-all duration-200 hover:border-white/40 hover:text-white"
-                    style={{
-                      height: "36px",
-                      padding: "0 24px",
-                      display: "inline-flex",
-                      alignItems: "center",
-                      backgroundColor: "transparent",
-                      border: "1px dashed rgba(255,255,255,0.25)",
-                      fontSize: "11px",
-                      letterSpacing: "0.08em",
-                      color: "rgba(255,255,255,0.4)",
-                    }}
-                  >
-                    Click to reveal
-                  </button>
-                )}
+                </div>
               </div>
             </div>
 
