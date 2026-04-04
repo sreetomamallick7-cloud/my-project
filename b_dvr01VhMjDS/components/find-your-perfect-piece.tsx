@@ -57,16 +57,6 @@ const quizQuestions = [
       "Modern",
     ],
   },
-  {
-    question: "Your consideration range",
-    options: [
-      "₹15 – 25 Lakhs",
-      "₹25 – 50 Lakhs",
-      "₹50 Lakhs – 1 Crore",
-      "Above ₹1 Crore",
-      "I would prefer not to say",
-    ],
-  },
 ]
 
 const previewChips = {
@@ -78,8 +68,9 @@ const previewChips = {
 export function FindYourPerfectPiece() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [currentStep, setCurrentStep] = useState(0)
-  const [answers, setAnswers] = useState<(string | null)[]>(Array(5).fill(null))
+  const [answers, setAnswers] = useState<(string | null)[]>(Array(4).fill(null))
   const [showResult, setShowResult] = useState(false)
+  const [revealedRows, setRevealedRows] = useState(0)
 
   const handleOpenModal = () => {
     setIsModalOpen(true)
@@ -98,7 +89,7 @@ export function FindYourPerfectPiece() {
   }
 
   const handleNext = () => {
-    if (currentStep < 4) {
+    if (currentStep < 3) {
       setCurrentStep(currentStep + 1)
     } else {
       setShowResult(true)
@@ -107,11 +98,17 @@ export function FindYourPerfectPiece() {
 
   const handleRestart = () => {
     setCurrentStep(0)
-    setAnswers(Array(5).fill(null))
+    setAnswers(Array(4).fill(null))
     setShowResult(false)
   }
 
-  const progressPercentage = showResult ? 100 : ((currentStep + 1) / 5) * 100
+  const handleRevealNext = () => {
+    if (revealedRows < 3) {
+      setRevealedRows(revealedRows + 1)
+    }
+  }
+
+  const progressPercentage = showResult ? 100 : ((currentStep + 1) / 4) * 100
 
   return (
     <>
@@ -184,13 +181,20 @@ export function FindYourPerfectPiece() {
                 color: "rgba(255,255,255,0.5)",
               }}
             >
-              Answer five questions about the moment, the feeling, and the stone — and we will show you the pieces from our collection that were made for exactly this.
+              Answer four questions about the moment, the feeling, and the stone — and we will show you the pieces from our collection that were made for exactly this.
             </p>
 
-            {/* Quiz Preview Chips */}
+            {/* Quiz Preview Chips - Step by Step Reveal */}
             <div className="mb-12 space-y-3">
               {/* Row A - The Occasion */}
-              <div>
+              <div
+                className="cursor-pointer transition-all duration-500"
+                onClick={handleRevealNext}
+                style={{
+                  opacity: revealedRows >= 1 ? 1 : 0.5,
+                  transform: revealedRows >= 1 ? "translateY(0)" : "translateY(4px)",
+                }}
+              >
                 <p
                   className="mb-3 font-sans uppercase"
                   style={{
@@ -201,31 +205,59 @@ export function FindYourPerfectPiece() {
                 >
                   The Occasion
                 </p>
-                <div className="flex flex-wrap justify-center gap-2.5">
-                  {previewChips.occasion.map((chip) => (
-                    <div
-                      key={chip}
-                      className="font-sans font-light"
-                      style={{
-                        height: "36px",
-                        padding: "0 20px",
-                        display: "flex",
-                        alignItems: "center",
-                        backgroundColor: "rgba(255,255,255,0.06)",
-                        border: "1px solid rgba(255,255,255,0.15)",
-                        fontSize: "11px",
-                        letterSpacing: "0.08em",
-                        color: "rgba(255,255,255,0.55)",
-                      }}
-                    >
-                      {chip}
-                    </div>
-                  ))}
-                </div>
+                {revealedRows >= 1 ? (
+                  <div className="flex flex-wrap justify-center gap-2.5">
+                    {previewChips.occasion.map((chip, index) => (
+                      <div
+                        key={chip}
+                        className="font-sans font-light transition-all duration-300"
+                        style={{
+                          height: "36px",
+                          padding: "0 20px",
+                          display: "flex",
+                          alignItems: "center",
+                          backgroundColor: "rgba(255,255,255,0.06)",
+                          border: "1px solid rgba(255,255,255,0.15)",
+                          fontSize: "11px",
+                          letterSpacing: "0.08em",
+                          color: "rgba(255,255,255,0.55)",
+                          animationDelay: `${index * 100}ms`,
+                        }}
+                      >
+                        {chip}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <button
+                    className="font-sans font-light transition-all duration-200 hover:border-white/40 hover:text-white"
+                    style={{
+                      height: "36px",
+                      padding: "0 24px",
+                      display: "inline-flex",
+                      alignItems: "center",
+                      backgroundColor: "transparent",
+                      border: "1px dashed rgba(255,255,255,0.25)",
+                      fontSize: "11px",
+                      letterSpacing: "0.08em",
+                      color: "rgba(255,255,255,0.4)",
+                    }}
+                  >
+                    Click to reveal
+                  </button>
+                )}
               </div>
 
               {/* Row B - The Stone */}
-              <div>
+              <div
+                className="cursor-pointer transition-all duration-500"
+                onClick={revealedRows >= 1 ? handleRevealNext : undefined}
+                style={{
+                  opacity: revealedRows >= 2 ? 1 : revealedRows >= 1 ? 0.5 : 0.3,
+                  transform: revealedRows >= 2 ? "translateY(0)" : "translateY(4px)",
+                  pointerEvents: revealedRows >= 1 ? "auto" : "none",
+                }}
+              >
                 <p
                   className="mb-3 font-sans uppercase"
                   style={{
@@ -236,31 +268,59 @@ export function FindYourPerfectPiece() {
                 >
                   The Stone
                 </p>
-                <div className="flex flex-wrap justify-center gap-2.5">
-                  {previewChips.stone.map((chip) => (
-                    <div
-                      key={chip}
-                      className="font-sans font-light"
-                      style={{
-                        height: "36px",
-                        padding: "0 20px",
-                        display: "flex",
-                        alignItems: "center",
-                        backgroundColor: "rgba(255,255,255,0.06)",
-                        border: "1px solid rgba(255,255,255,0.15)",
-                        fontSize: "11px",
-                        letterSpacing: "0.08em",
-                        color: "rgba(255,255,255,0.55)",
-                      }}
-                    >
-                      {chip}
-                    </div>
-                  ))}
-                </div>
+                {revealedRows >= 2 ? (
+                  <div className="flex flex-wrap justify-center gap-2.5">
+                    {previewChips.stone.map((chip, index) => (
+                      <div
+                        key={chip}
+                        className="font-sans font-light transition-all duration-300"
+                        style={{
+                          height: "36px",
+                          padding: "0 20px",
+                          display: "flex",
+                          alignItems: "center",
+                          backgroundColor: "rgba(255,255,255,0.06)",
+                          border: "1px solid rgba(255,255,255,0.15)",
+                          fontSize: "11px",
+                          letterSpacing: "0.08em",
+                          color: "rgba(255,255,255,0.55)",
+                          animationDelay: `${index * 100}ms`,
+                        }}
+                      >
+                        {chip}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <button
+                    className="font-sans font-light transition-all duration-200 hover:border-white/40 hover:text-white"
+                    style={{
+                      height: "36px",
+                      padding: "0 24px",
+                      display: "inline-flex",
+                      alignItems: "center",
+                      backgroundColor: "transparent",
+                      border: "1px dashed rgba(255,255,255,0.25)",
+                      fontSize: "11px",
+                      letterSpacing: "0.08em",
+                      color: "rgba(255,255,255,0.4)",
+                    }}
+                  >
+                    Click to reveal
+                  </button>
+                )}
               </div>
 
               {/* Row C - The Feeling */}
-              <div>
+              <div
+                className="cursor-pointer transition-all duration-500"
+                onClick={revealedRows >= 2 ? handleRevealNext : undefined}
+                style={{
+                  opacity: revealedRows >= 3 ? 1 : revealedRows >= 2 ? 0.5 : 0.3,
+                  transform: revealedRows >= 3 ? "translateY(0)" : "translateY(4px)",
+                  pointerEvents: revealedRows >= 2 ? "auto" : "none",
+                }}
+              >
                 <p
                   className="mb-3 font-sans uppercase"
                   style={{
@@ -271,27 +331,47 @@ export function FindYourPerfectPiece() {
                 >
                   The Feeling
                 </p>
-                <div className="flex flex-wrap justify-center gap-2.5">
-                  {previewChips.feeling.map((chip) => (
-                    <div
-                      key={chip}
-                      className="font-sans font-light"
-                      style={{
-                        height: "36px",
-                        padding: "0 20px",
-                        display: "flex",
-                        alignItems: "center",
-                        backgroundColor: "rgba(255,255,255,0.06)",
-                        border: "1px solid rgba(255,255,255,0.15)",
-                        fontSize: "11px",
-                        letterSpacing: "0.08em",
-                        color: "rgba(255,255,255,0.55)",
-                      }}
-                    >
-                      {chip}
-                    </div>
-                  ))}
-                </div>
+                {revealedRows >= 3 ? (
+                  <div className="flex flex-wrap justify-center gap-2.5">
+                    {previewChips.feeling.map((chip, index) => (
+                      <div
+                        key={chip}
+                        className="font-sans font-light transition-all duration-300"
+                        style={{
+                          height: "36px",
+                          padding: "0 20px",
+                          display: "flex",
+                          alignItems: "center",
+                          backgroundColor: "rgba(255,255,255,0.06)",
+                          border: "1px solid rgba(255,255,255,0.15)",
+                          fontSize: "11px",
+                          letterSpacing: "0.08em",
+                          color: "rgba(255,255,255,0.55)",
+                          animationDelay: `${index * 100}ms`,
+                        }}
+                      >
+                        {chip}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <button
+                    className="font-sans font-light transition-all duration-200 hover:border-white/40 hover:text-white"
+                    style={{
+                      height: "36px",
+                      padding: "0 24px",
+                      display: "inline-flex",
+                      alignItems: "center",
+                      backgroundColor: "transparent",
+                      border: "1px dashed rgba(255,255,255,0.25)",
+                      fontSize: "11px",
+                      letterSpacing: "0.08em",
+                      color: "rgba(255,255,255,0.4)",
+                    }}
+                  >
+                    Click to reveal
+                  </button>
+                )}
               </div>
             </div>
 
@@ -340,7 +420,7 @@ export function FindYourPerfectPiece() {
                 color: "rgba(255,255,255,0.25)",
               }}
             >
-              5 questions · 2 minutes · No sign-up required
+              4 questions · 2 minutes · No sign-up required
             </p>
           </div>
         </div>
@@ -386,7 +466,7 @@ export function FindYourPerfectPiece() {
                         color: "rgba(255,255,255,0.3)",
                       }}
                     >
-                      {String(currentStep + 1).padStart(2, "0")} / 05
+                      {String(currentStep + 1).padStart(2, "0")} / 04
                     </p>
 
                     {/* Progress Bar */}
