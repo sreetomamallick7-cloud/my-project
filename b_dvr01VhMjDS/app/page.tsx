@@ -3,6 +3,7 @@ import { Hero } from "@/components/hero"
 import { ProductDiscovery } from "@/components/product-discovery"
 import { ProductStory } from "@/components/product-story"
 import { ShopTheLook } from "@/components/shop-the-look"
+import { FindYourPiece } from "@/components/find-your-piece"
 
 export default function Home() {
   return (
@@ -12,6 +13,7 @@ export default function Home() {
       <ProductDiscovery />
       <ProductStory />
       <ShopTheLook />
+      <FindYourPiece />
     </main>
   )
 }
