@@ -5,6 +5,7 @@ import { ProductStory } from "@/components/product-story"
 import { ShopTheLook } from "@/components/shop-the-look"
 import { FindYourPiece } from "@/components/find-your-piece"
 import { EventsSection } from "@/components/events-section"
+import { IntentCapture } from "@/components/intent-capture"
 
 export default function Home() {
   return (
@@ -16,6 +17,7 @@ export default function Home() {
       <ShopTheLook />
       <FindYourPiece />
       <EventsSection />
+      <IntentCapture />
     </main>
   )
 }
